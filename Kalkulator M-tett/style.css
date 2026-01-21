@@ -1,0 +1,460 @@
+/* ===================================
+   TECHNICAL EXCELLENCE (M-TETT REFINED)
+   =================================== */
+
+:root {
+    /* M-Tett Core Palette */
+    --mtett-green: #04914d;
+    --mtett-green-dark: #036b39;
+    --mtett-green-light: #10b981;
+    --mtett-slate: #64748B;
+
+    /* Neutral / UI */
+    --white: #FFFFFF;
+    --bg-light: #F1F5F9;
+    --border-light: #E2E8F0;
+    --text-main: #1E293B;
+    --text-muted: #475569;
+
+    /* Layout */
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.calc-container {
+    max-width: 1100px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+/* ===================================
+   HEADER SECTION
+   =================================== */
+.main-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.main-title {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+}
+
+.subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+/* ===================================
+   UNIFIED DASHBOARD CARD
+   =================================== */
+.dashboard-card {
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+    .dashboard-card {
+        grid-template-columns: 1.2fr 1fr;
+    }
+}
+
+/* ===================================
+   LEFT COLUMN: ANALYSIS
+   =================================== */
+.diag-panel {
+    padding: 3rem;
+    background: var(--white);
+}
+
+.panel-header {
+    margin-bottom: 2.5rem;
+}
+
+.panel-header h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 0.5rem;
+}
+
+.panel-header h3 svg {
+    color: var(--mtett-green);
+}
+
+.panel-sub {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+.input-module {
+    margin-bottom: 2.5rem;
+    padding: 1rem 0;
+}
+
+.label-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+}
+
+.label-text {
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.area-val {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--mtett-green-dark);
+}
+
+.area-val span {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-left: 4px;
+}
+
+/* REFINED SLIDER */
+.custom-slider {
+    width: 100%;
+    height: 6px;
+    background: var(--bg-light);
+    border-radius: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+}
+
+.custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: var(--white);
+    border: 3px solid var(--mtett-green);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--shadow-base);
+    transition: all 0.2s ease;
+}
+
+.custom-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+/* DAMAGE CATEGORY BUTTONS */
+.damage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.damage-btn {
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    padding: 12px 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.damage-btn:hover {
+    border-color: var(--mtett-green);
+    background: var(--bg-light);
+}
+
+.damage-btn.active {
+    background: var(--mtett-green);
+    color: var(--white);
+    border-color: var(--mtett-green);
+    box-shadow: 0 2px 4px rgba(4, 145, 77, 0.2);
+}
+
+.expert-notice {
+    display: flex;
+    gap: 12px;
+    padding: 1.25rem;
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    color: var(--text-main);
+    line-height: 1.5;
+    margin-top: 2rem;
+}
+
+.expert-notice svg {
+    color: var(--mtett-green);
+    flex-shrink: 0;
+}
+
+.expert-notice strong {
+    color: var(--mtett-green-dark);
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* ===================================
+   RIGHT COLUMN: STATS / BENEFITS
+   =================================== */
+.side-analytics {
+    padding: 3rem;
+    background: var(--mtett-green-dark);
+    color: var(--white);
+}
+
+.side-analytics h4 {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 2.5rem;
+}
+
+.stat-item {
+    margin-bottom: 2.5rem;
+    display: flex;
+    gap: 1.25rem;
+}
+
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    flex-shrink: 0;
+}
+
+.stat-content h5 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--white);
+}
+
+.stat-content p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+}
+
+/* ===================================
+   LEAD CAPTURE
+   =================================== */
+.lead-overlay {
+    padding: 3.5rem;
+    border-top: 1px solid var(--border-light);
+    background: var(--white);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.form-field input {
+    width: 100%;
+    background: var(--bg-light);
+    border: 1px solid var(--border-light);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    color: var(--text-main);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.form-field input:focus {
+    outline: none;
+    border-color: var(--mtett-green);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(4, 145, 77, 0.05);
+}
+
+/* ===================================
+   BUTTONS
+   =================================== */
+.btn-mtett {
+    background: var(--mtett-green-dark);
+    color: var(--white);
+    padding: 1.1rem 2rem;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.btn-mtett:hover {
+    background: #025a30;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-base);
+}
+
+/* ===================================
+   RESULTS SECTION
+   =================================== */
+.result-display {
+    padding: 4rem 3rem;
+    background: var(--white);
+}
+
+.result-tabs {
+    display: flex;
+    background: var(--bg-light);
+    padding: 5px;
+    border-radius: 12px;
+    margin-bottom: 3.5rem;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+    background: var(--white);
+    color: var(--mtett-green-dark);
+    box-shadow: var(--shadow-base);
+}
+
+.metrikk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.metrikk-card {
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.metrikk-card:hover {
+    border-color: var(--mtett-green-light);
+}
+
+.metrikk-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.metrikk-value {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: var(--mtett-green-dark);
+    line-height: 1;
+}
+
+.metrikk-unit {
+    font-size: 1.25rem;
+    color: var(--mtett-green-light);
+    font-weight: 600;
+}
+
+/* CHART CONTAINER (Optionally keep for M-Tett) */
+.chart-wrapper {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--bg-light);
+    border-radius: var(--radius-lg);
+}
+
+.chart-container {
+    height: 300px;
+    position: relative;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 600px) {
+
+    .diag-panel,
+    .side-analytics,
+    .lead-overlay,
+    .result-display {
+        padding: 2rem 1.5rem;
+    }
+}

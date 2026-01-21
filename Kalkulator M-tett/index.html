@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M-Tett - Besparelseskalkulator</title>
+    <meta name="description"
+        content="Beregn hvor mye du sparer i miljø, tid og penger ved å velge M-Tett punktutbedring.">
+
+    <!-- Original Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="calc-container">
+        <!-- Header Section -->
+        <header class="main-header">
+            <div style="margin-bottom: 2rem;">
+                <img src="m-tett-logo-darker.svg" alt="M-Tett Logo" style="height: 50px;">
+            </div>
+            <h1 class="main-title">Hvor mye kan du spare <br>på å unngå totalrenovering?</h1>
+            <p class="subtitle">Beregn miljøgevinst, økonomisk besparelse og redusert nedetid ved å velge M-Tett
+                punktutbedring.</p>
+        </header>
+
+        <!-- Main Dashboard Card (For Inputs & Lead) -->
+        <div id="calculatorCard" class="dashboard-card">
+
+            <!-- Left: Analysis Panel -->
+            <div class="diag-panel" id="inputSection">
+                <div class="panel-header">
+                    <h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        Analyse av ditt baderom
+                    </h3>
+                    <p class="panel-sub">Konfigurer areal og skadetype for å beregne din besparelse.</p>
+                </div>
+
+                <div class="input-module">
+                    <div class="label-header">
+                        <span class="label-text">Badets areal</span>
+                        <div class="area-val"><span id="areaDisplay">6</span><span>m²</span></div>
+                    </div>
+                    <input type="range" id="areaSlider" class="custom-slider" min="2" max="25" value="6" step="1">
+                </div>
+
+                <div class="input-module">
+                    <span class="label-text">Hva er skadet?</span>
+                    <div id="damageGrid" class="damage-grid">
+                        <!-- Buttons injected by JS -->
+                    </div>
+                    <input type="hidden" id="selectedDamage" value="">
+                </div>
+
+                <button id="nextBtn" class="btn-mtett" style="margin-top: 2.5rem;">
+                    Se beregning
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+
+                <div id="step1Error" class="hidden"
+                    style="color: #dc2626; font-size: 0.85rem; margin-top: 1rem; text-align: center;">
+                    Vennligst velg hva som er skadet før du går videre.
+                </div>
+            </div>
+
+            <!-- Right: Real-time Analytics (Benefits) -->
+            <div class="side-analytics" id="benefitsPanel">
+                <h4>Hvorfor velge M-Tett?</h4>
+
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                            </path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h5>Bevarer eksisterende verdier</h5>
+                        <p>Vi fjerner kun det som er nødvendig og bygger opp igjen med full garanti.</p>
+                    </div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h5>Formidabel miljøgevinst</h5>
+                        <p>Reduserer avfall og CO2-utslipp med over 90% sammenlignet med riving.</p>
+                    </div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h5>Raskt utført</h5>
+                        <p>De fleste utbedringer er ferdige på få dager, ikke uker.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lead Capture Overlay (Initially Hidden) -->
+            <div id="leadFormSection" class="lead-overlay hidden">
+                <div class="panel-header" style="text-align: center;">
+                    <h3>Se dine resultater</h3>
+                    <p class="panel-sub">Fyll ut detaljene for å låse opp din personlige besparelses-analyse.</p>
+                </div>
+
+                <form id="leadForm" class="lead-form">
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <input type="text" id="name" placeholder="Ditt navn" required>
+                        </div>
+                        <div class="form-field">
+                            <input type="email" id="email" placeholder="Din e-postadresse" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-mtett">Se full analyse</button>
+                    <p style="font-size: 0.75rem; text-align: center; color: var(--text-muted); margin-top: 1rem;">
+                        Ved å trykke på knappen godtar du våre vilkår.
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- STEP 3: Results Section (Restored Original Layout) -->
+        <section id="resultsSection" class="hidden mt-12">
+
+            <!-- Key Metrics Summary (Original Minimalist Grid) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-20 border-b border-gray-200 pb-12">
+                <div class="p-4">
+                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Unngått Utslipp</p>
+                    <p id="co2e-summary" class="text-4xl font-extrabold text-gray-900 tracking-tight">0 kg</p>
+                </div>
+                <div class="p-4">
+                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Bespart Kostnad</p>
+                    <p id="cost-summary" class="text-4xl font-extrabold text-gray-900 tracking-tight">0 NOK</p>
+                </div>
+                <div class="p-4">
+                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Bespart Tid</p>
+                    <p id="downtime-summary" class="text-4xl font-extrabold text-gray-900 tracking-tight">0 Døgn</p>
+                </div>
+            </div>
+
+            <!-- Detailed Breakdown Sections -->
+            <div class="space-y-24">
+
+                <!-- CO2e Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-4 space-y-4">
+                        <div class="inline-block p-2 bg-emerald-100 rounded-md mb-2">
+                            <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">Miljøgevinst</h3>
+                        <p class="text-gray-600 leading-relaxed">Ved å velge punktreparasjon reduserer du
+                            karbonavtrykket betraktelig sammenlignet med totalrenovering.</p>
+                        <div class="pt-4">
+                            <p class="text-sm text-gray-500 uppercase tracking-wide font-semibold">Din besparelse</p>
+                            <p id="co2e-result" class="text-5xl font-extrabold text-emerald-600 tracking-tight mt-1">0
+                                kg</p>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-8 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="h-80 w-full">
+                            <canvas id="co2eChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cost Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-4 space-y-4 lg:order-last">
+                        <div class="inline-block p-2 bg-blue-100 rounded-md mb-2">
+                            <svg class="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">Økonomisk Besparelse</h3>
+                        <p class="text-gray-600 leading-relaxed">Punktreparasjon er en kostnadseffektiv løsning som
+                            sparer deg for store utgifter knyttet til riving og gjenoppbygging.</p>
+                        <div class="pt-4">
+                            <p class="text-sm text-gray-500 uppercase tracking-wide font-semibold">Din besparelse</p>
+                            <p id="cost-result" class="text-5xl font-extrabold text-blue-600 tracking-tight mt-1">0 NOK
+                            </p>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-8 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="h-80 w-full">
+                            <canvas id="costChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Downtime Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-4 space-y-4">
+                        <div class="inline-block p-2 bg-orange-100 rounded-md mb-2">
+                            <svg class="w-6 h-6 text-orange-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">Tidsbruk</h3>
+                        <p class="text-gray-600 leading-relaxed">Minimer tiden badet er ute av drift. Kom raskere
+                            tilbake til hverdagen med effektive utbedringer.</p>
+                        <div class="pt-4">
+                            <p class="text-sm text-gray-500 uppercase tracking-wide font-semibold">Din besparelse</p>
+                            <p id="downtime-result" class="text-5xl font-extrabold text-orange-600 tracking-tight mt-1">
+                                0 Døgn</p>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-8 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="h-80 w-full">
+                            <canvas id="downtimeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-20 text-center">
+                <a href="https://m-tett.no/kontakt" class="btn-mtett inline-flex"
+                    style="max-width: 400px; margin: 0 auto;">
+                    Bestill befaring nå
+                </a>
+                <p class="mt-8 text-sm text-gray-400 italic">
+                    * Estimater basert på gjennomsnittlig Base Case fra M-Tett erfaringsdatabase.
+                </p>
+            </div>
+        </section>
+
+        <!-- Info Footer (Show only during input) -->
+        <div id="infoFooter" class="expert-notice"
+            style="margin-top: 4rem; justify-content: center; background: none; border: 1px solid var(--border-light);">
+            <p style="text-align: center; color: var(--text-muted);">Basert på gjennomsnittlig Base Case fra M-Tett
+                erfaringsdatabase. Dokumentert miljøbesparelse.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,453 @@
+/* ===================================
+   RESET & BASE STYLES
+   =================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===================================
+   TECHNICAL EXCELLENCE (M-TEK REFINED)
+   =================================== */
+
+:root {
+    /* M-Tek Core Palette */
+    --mtek-navy: #142A56;
+    --mtek-navy-dark: #0A1629;
+    --mtek-blue: #3B82F6;
+    /* Professional blue, not neon */
+    --mtek-slate: #64748B;
+
+    /* Neutral / UI */
+    --white: #FFFFFF;
+    --bg-light: #F1F5F9;
+    --border-light: #E2E8F0;
+    --text-main: #1E293B;
+    --text-muted: #64748B;
+
+    /* Layout */
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.calc-container {
+    max-width: 1100px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+/* ===================================
+   HEADER SECTION
+   =================================== */
+.main-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.brand-badge {
+    display: inline-block;
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--mtek-navy);
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-base);
+}
+
+.main-title {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 800;
+    color: var(--mtek-navy-dark);
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+}
+
+.subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+/* ===================================
+   UNIFIED DASHBOARD CARD
+   =================================== */
+.dashboard-card {
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+    .dashboard-card {
+        grid-template-columns: 1.2fr 1fr;
+    }
+}
+
+/* ===================================
+   LEFT COLUMN: ANALYSIS
+   =================================== */
+.diag-panel {
+    padding: 3rem;
+    background: var(--white);
+}
+
+.panel-header {
+    margin-bottom: 2.5rem;
+}
+
+.panel-header h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--mtek-navy-dark);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 0.5rem;
+}
+
+.panel-header h3 svg {
+    color: var(--mtek-blue);
+}
+
+.panel-sub {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+.input-module {
+    margin-bottom: 2.5rem;
+    padding: 1.5rem 0;
+}
+
+.input-module label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+}
+
+.label-text {
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.area-val {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--mtek-navy);
+}
+
+.area-val span {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-left: 4px;
+}
+
+/* REFINED SLIDER */
+.custom-slider {
+    width: 100%;
+    height: 6px;
+    background: var(--bg-light);
+    border-radius: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+}
+
+.custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: var(--white);
+    border: 3px solid var(--mtek-navy);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--shadow-base);
+    transition: all 0.2s ease;
+}
+
+.custom-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    border-color: var(--mtek-blue);
+}
+
+.expert-notice {
+    display: flex;
+    gap: 12px;
+    padding: 1.25rem;
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    color: var(--text-main);
+    line-height: 1.5;
+}
+
+.expert-notice svg {
+    color: var(--mtek-blue);
+    flex-shrink: 0;
+}
+
+.expert-notice strong {
+    color: var(--mtek-navy-dark);
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* ===================================
+   RIGHT COLUMN: STATS / BENEFITS
+   =================================== */
+.side-analytics {
+    padding: 3rem;
+    background: var(--mtek-navy);
+    color: var(--white);
+}
+
+.side-analytics h4 {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 2.5rem;
+}
+
+.stat-item {
+    margin-bottom: 2.5rem;
+    display: flex;
+    gap: 1.25rem;
+}
+
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mtek-blue);
+    flex-shrink: 0;
+}
+
+.stat-content h5 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--white);
+}
+
+.stat-content p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+}
+
+/* ===================================
+   LEAD CAPTURE
+   =================================== */
+.lead-overlay {
+    padding: 3.5rem;
+    border-top: 1px solid var(--border-light);
+    background: var(--white);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.form-field input {
+    width: 100%;
+    background: var(--bg-light);
+    border: 1px solid var(--border-light);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    color: var(--text-main);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.form-field input:focus {
+    outline: none;
+    border-color: var(--mtek-navy);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(20, 42, 86, 0.05);
+}
+
+/* ===================================
+   BUTTONS
+   =================================== */
+.btn-mtek {
+    background: var(--mtek-navy);
+    color: var(--white);
+    padding: 1.1rem 2rem;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.btn-mtek:hover {
+    background: var(--mtek-navy-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-base);
+}
+
+/* ===================================
+   RESULTS SECTION
+   =================================== */
+.result-display {
+    padding: 4rem 3rem;
+    background: var(--white);
+}
+
+.result-tabs {
+    display: flex;
+    background: var(--bg-light);
+    padding: 5px;
+    border-radius: 12px;
+    margin-bottom: 3.5rem;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+    background: var(--white);
+    color: var(--mtek-navy);
+    box-shadow: var(--shadow-base);
+}
+
+.metrikk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.metrikk-card {
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.metrikk-card:hover {
+    border-color: var(--mtek-blue);
+}
+
+.metrikk-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.metrikk-value {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: var(--mtek-navy-dark);
+    line-height: 1;
+}
+
+.metrikk-unit {
+    font-size: 1.25rem;
+    color: var(--mtek-blue);
+    font-weight: 600;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: var(--spacing-sm);
+    }
+
+    .input-section,
+    .results-section,
+    .lead-capture-mode {
+        padding: var(--spacing-lg);
+    }
+
+    .header-content {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .result-value {
+        font-size: 1.5rem;
+    }
+}

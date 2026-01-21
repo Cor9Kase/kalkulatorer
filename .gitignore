@@ -1,0 +1,5 @@
+.DS_Store
+**/*.xlsx
+**/*.pdf
+**/Informasjon om bevar.txt
+**/info.txt
