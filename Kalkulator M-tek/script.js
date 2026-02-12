@@ -23,6 +23,16 @@ const emissionsData = {
     }
 };
 
+const pricingData = {
+    demolition: {
+        costPerSqm: 9500,
+        minCost: 50000
+    },
+    repair: {
+        fixedCost: 42500
+    }
+};
+
 // ===================================
 // STATE MANAGEMENT
 // ===================================
@@ -60,6 +70,14 @@ function calculateDemolitionEstimate(area) {
     return calculateEstimate(area, emissionsData.demolition);
 }
 
+function calculateDemolitionCost(area) {
+    return Math.max(area * pricingData.demolition.costPerSqm, pricingData.demolition.minCost);
+}
+
+function calculateRepairCost() {
+    return pricingData.repair.fixedCost;
+}
+
 // ===================================
 // FORMATTING FUNCTIONS
 // ===================================
@@ -82,6 +100,15 @@ function formatPercent(value) {
     }).format(value);
 }
 
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('nb-NO', {
+        style: 'currency',
+        currency: 'NOK',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(amount);
+}
+
 // ===================================
 // UI UPDATE FUNCTIONS
 // ===================================
@@ -92,20 +119,23 @@ function updateDisplay() {
     const { area } = currentInputs;
     const mtek = calculateMtekEstimate(area);
     const demolition = calculateDemolitionEstimate(area);
+    const repairCost = calculateRepairCost();
+    const demolitionCost = calculateDemolitionCost(area);
 
     const avoided = Math.max(demolition.total - mtek.total, 0);
-    const reductionPct = demolition.total > 0 ? (avoided / demolition.total) * 100 : 0;
+    const savingsNok = Math.max(demolitionCost - repairCost, 0);
+    const reductionPct = demolitionCost > 0 ? (savingsNok / demolitionCost) * 100 : 0;
 
     if (currentView === 'repair') {
         elements.costValue.textContent = formatNumber(mtek.total);
-        elements.timeValue.textContent = formatKg(avoided) + " spart";
+        elements.timeValue.textContent = `${formatCurrency(savingsNok)} spart`;
 
         if (elements.materialSavings) {
             elements.materialSavings.textContent = formatPercent(reductionPct);
         }
     } else {
         elements.costValue.textContent = formatNumber(demolition.total);
-        elements.timeValue.textContent = formatKg(0) + " spart";
+        elements.timeValue.textContent = `${formatCurrency(0)} spart`;
 
         if (elements.materialSavings) {
             elements.materialSavings.textContent = '0,0';
