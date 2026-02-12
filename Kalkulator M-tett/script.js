@@ -93,15 +93,14 @@ window.onload = function () {
 
     // --- Datamodell ---
     const BASE_CASE_LOOKUP = {
-        1: { cost: 299000, days: 25 }, 2: { cost: 312000, days: 25 }, 3: { cost: 322000, days: 25 },
-        4: { cost: 338000, days: 25 }, 5: { cost: 353000, days: 25 }, 6: { cost: 368000, days: 25 },
-        7: { cost: 378000, days: 25 }, 8: { cost: 398000, days: 25 }, 9: { cost: 413000, days: 25 },
-        10: { cost: 428000, days: 25 }, 11: { cost: 443000, days: 30 }, 12: { cost: 443000, days: 30 },
-        13: { cost: 453000, days: 30 }, 14: { cost: 453000, days: 30 }, 15: { cost: 463000, days: 30 },
-        16: { cost: 463000, days: 30 }, 17: { cost: 473000, days: 30 }, 18: { cost: 483000, days: 30 },
-        19: { cost: 493000, days: 30 }, 20: { cost: 503000, days: 30 }, 21: { cost: 513000, days: 30 },
-        22: { cost: 523000, days: 30 }, 23: { cost: 533000, days: 30 }, 24: { cost: 543000, days: 30 },
-        25: { cost: 553000, days: 30 }
+        2: { cost: 299000, days: 25 }, 3: { cost: 312000, days: 25 }, 4: { cost: 322000, days: 25 },
+        5: { cost: 338000, days: 25 }, 6: { cost: 353000, days: 25 }, 7: { cost: 368000, days: 25 },
+        8: { cost: 378000, days: 25 }, 9: { cost: 398000, days: 25 }, 10: { cost: 413000, days: 25 },
+        11: { cost: 428000, days: 30 }, 12: { cost: 443000, days: 30 }, 13: { cost: 443000, days: 30 },
+        14: { cost: 453000, days: 30 }, 15: { cost: 453000, days: 30 }, 16: { cost: 463000, days: 30 },
+        17: { cost: 463000, days: 30 }, 18: { cost: 473000, days: 30 }, 19: { cost: 483000, days: 30 },
+        20: { cost: 493000, days: 30 }, 21: { cost: 503000, days: 30 }, 22: { cost: 513000, days: 30 },
+        23: { cost: 523000, days: 30 }, 24: { cost: 533000, days: 30 }, 25: { cost: 543000, days: 30 }
     };
 
     const M_TETT_CASES = [
@@ -161,7 +160,7 @@ window.onload = function () {
 
         // Base Case
         let lookupArea = Math.round(A);
-        const baseLookup = BASE_CASE_LOOKUP[Math.min(25, Math.max(1, lookupArea))];
+        const baseLookup = BASE_CASE_LOOKUP[Math.min(25, Math.max(2, lookupArea))];
         const baseCostTotal = baseLookup.cost;
         const baseDowntime = baseLookup.days;
         let baseCO2eTotal = 426 + (232.5 * A);

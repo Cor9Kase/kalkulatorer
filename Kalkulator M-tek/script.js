@@ -1,22 +1,25 @@
 // ===================================
-// PRICING DATA & CONFIGURATION
+// EMISSIONS DATA (Resultat - M-tek)
 // ===================================
 
-const pricingData = {
-    // Base costs per square meter
-    baseCosts: {
-        demolition: {
-            costPerSqm: 9500,      // kr per m²
-            timePerSqm: 3,         // days per m²
-            minCost: 50000,        // Minimum cost
-            minTime: 14,           // Minimum days
-        },
-        repair: {
-            varmekabler: {
-                baseCost: 42500,
-                timeInDays: 1,
-            }
-        },
+// Derived from sheet values in "Resultat - M-tek".
+// Formulas are scaled from B22=5 and expressed as fixed + per m2 coefficients.
+const emissionsData = {
+    mtekEstimate: {
+        // Case 1 + Case 2 (single estimate shown to users)
+        materialFixed: 2.772268831128445,
+        transportFixed: 46.08,
+        wasteFixed: 0.31166493604653883,
+        materialPerSqm: 31.99593373339319,
+        wastePerSqm: 3.627543711527616
+    },
+    demolition: {
+        // Base case - Rive bad uten gjenbruk
+        materialFixed: 0,
+        transportFixed: 276.48,
+        wasteFixed: 0,
+        materialPerSqm: 302.9770853070729,
+        wastePerSqm: 50.697377709796484
     }
 };
 
@@ -26,8 +29,7 @@ const pricingData = {
 
 let currentView = 'repair'; // 'repair' or 'demolition'
 let currentInputs = {
-    area: 6,
-    damageType: 'varmekabler'
+    area: 6
 };
 let isLeadSubmitted = false;
 
@@ -41,43 +43,43 @@ let elements = {};
 // CALCULATION FUNCTIONS
 // ===================================
 
-function calculateDemolitionCost(area) {
-    const { costPerSqm, minCost, timePerSqm, minTime } = pricingData.baseCosts.demolition;
+function calculateEstimate(area, model) {
+    const material = model.materialFixed + area * model.materialPerSqm;
+    const transport = model.transportFixed;
+    const waste = model.wasteFixed + area * model.wastePerSqm;
+    const total = material + transport + waste;
 
-    const cost = Math.max(area * costPerSqm, minCost);
-    const time = Math.max(Math.ceil(area * timePerSqm), minTime);
-
-    return { cost, time };
+    return { material, transport, waste, total };
 }
 
-function calculateRepairCost(area, damageType) {
-    const repairData = pricingData.baseCosts.repair[damageType];
+function calculateMtekEstimate(area) {
+    return calculateEstimate(area, emissionsData.mtekEstimate);
+}
 
-    // Fixed price ("sjablong") regardless of area for these specific repairs
-    const cost = repairData.baseCost;
-    const time = repairData.timeInDays;
-
-    return { cost, time };
+function calculateDemolitionEstimate(area) {
+    return calculateEstimate(area, emissionsData.demolition);
 }
 
 // ===================================
 // FORMATTING FUNCTIONS
 // ===================================
 
-function formatCurrency(amount) {
+function formatNumber(amount) {
     return new Intl.NumberFormat('nb-NO', {
-        style: 'currency',
-        currency: 'NOK',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
     }).format(amount);
 }
 
-function formatDays(days) {
-    if (days === 1) return '1 dag';
-    if (days < 7) return `${days} dager`;
-    const weeks = Math.round(days / 7);
-    return weeks === 1 ? '1 uke' : `${weeks} uker`;
+function formatKg(amount) {
+    return `${formatNumber(amount)} kgCO2e`;
+}
+
+function formatPercent(value) {
+    return new Intl.NumberFormat('nb-NO', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+    }).format(value);
 }
 
 // ===================================
@@ -85,30 +87,28 @@ function formatDays(days) {
 // ===================================
 
 function updateDisplay() {
-    // Only update display if lead form is submitted
     if (!isLeadSubmitted) return;
 
     const { area } = currentInputs;
-    const damageType = 'varmekabler'; // Exclusively for heating cables now
+    const mtek = calculateMtekEstimate(area);
+    const demolition = calculateDemolitionEstimate(area);
 
-    const demolition = calculateDemolitionCost(area);
-    const repair = calculateRepairCost(area, damageType);
+    const avoided = Math.max(demolition.total - mtek.total, 0);
+    const reductionPct = demolition.total > 0 ? (avoided / demolition.total) * 100 : 0;
 
     if (currentView === 'repair') {
-        elements.costValue.textContent = formatCurrency(repair.cost);
-        // M-Tek emphasizes heat back on 1 day
-        elements.timeValue.textContent = "1 dag";
+        elements.costValue.textContent = formatNumber(mtek.total);
+        elements.timeValue.textContent = formatKg(avoided);
 
-        // Show environmental savings if elements exist
         if (elements.materialSavings) {
-            elements.materialSavings.textContent = "95";
+            elements.materialSavings.textContent = formatPercent(reductionPct);
         }
     } else {
-        elements.costValue.textContent = formatCurrency(demolition.cost);
-        elements.timeValue.textContent = formatDays(demolition.time);
+        elements.costValue.textContent = formatNumber(demolition.total);
+        elements.timeValue.textContent = formatKg(0);
 
         if (elements.materialSavings) {
-            elements.materialSavings.textContent = "0";
+            elements.materialSavings.textContent = '0,0';
         }
     }
 
@@ -116,7 +116,7 @@ function updateDisplay() {
 }
 
 function animateResults() {
-    const resultCards = document.querySelectorAll('.result-card');
+    const resultCards = document.querySelectorAll('.metrikk-card, .result-card');
     resultCards.forEach((card, index) => {
         card.style.animation = 'none';
         setTimeout(() => {
@@ -148,7 +148,7 @@ function handleNextStep() {
 function handleViewToggle(view) {
     currentView = view;
 
-    elements.toggleBtns.forEach(btn => {
+    elements.toggleBtns.forEach((btn) => {
         if (btn.dataset.view === view) {
             btn.classList.add('active');
         } else {
@@ -167,7 +167,7 @@ function handleLeadSubmit(e) {
     const email = document.getElementById('leadEmail') ? document.getElementById('leadEmail').value : document.getElementById('email').value;
 
     if (name && phone && email) {
-        console.log('Lead captured for M-Tek:', { name, phone, email, inputs: currentInputs });
+        console.log('Lead captured for M-Tek:', { name, phone, email, area: currentInputs.area });
 
         isLeadSubmitted = true;
         elements.leadFormSection.classList.add('hidden');
@@ -183,16 +183,13 @@ function handleLeadSubmit(e) {
 // ===================================
 
 function initializeCalculator() {
-    // Slider Events
     elements.areaSlider.addEventListener('input', (e) => {
         handleAreaChange(e.target.value);
     });
 
-    // Navigation and Form Events
     elements.nextBtn.addEventListener('click', handleNextStep);
 
-    // Toggle View Events
-    elements.toggleBtns.forEach(btn => {
+    elements.toggleBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
             handleViewToggle(btn.dataset.view);
         });
@@ -200,7 +197,6 @@ function initializeCalculator() {
 
     elements.leadForm.addEventListener('submit', handleLeadSubmit);
 
-    // Support module submitBtn if present
     const submitBtn = document.getElementById('submitBtn');
     if (submitBtn) {
         submitBtn.addEventListener('click', handleLeadSubmit);
@@ -223,13 +219,12 @@ function init() {
     };
 
     currentInputs = {
-        area: elements.areaSlider ? parseFloat(elements.areaSlider.value) : 6,
-        damageType: 'varmekabler'
+        area: elements.areaSlider ? parseFloat(elements.areaSlider.value) : 6
     };
 
     initializeCalculator();
 
-    console.log('✅ M-Tek Technical Dashboard initialized');
+    console.log('M-Tek estimator initialized with Resultat - M-tek baseline');
 }
 
 if (document.readyState === 'loading') {
