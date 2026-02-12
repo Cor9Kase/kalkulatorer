@@ -50,7 +50,6 @@ function normalizeAreaForLookup(area) {
 // STATE MANAGEMENT
 // ===================================
 
-let currentView = 'repair'; // 'repair' or 'demolition'
 let currentInputs = {
     area: 6
 };
@@ -125,31 +124,17 @@ function updateDisplay() {
         elements.metaDays.textContent = `${rehab.days} døgn`;
     }
 
-    if (currentView === 'repair') {
-        elements.costLabel.textContent = 'Estimert kostnad (M-Tek)';
-        elements.costValue.textContent = formatCurrency(mtekPrice.cost);
-        elements.costUnit.textContent = 'kr';
+    elements.costLabel.textContent = 'Estimert kostnad (M-Tek)';
+    elements.costValue.textContent = formatCurrency(mtekPrice.cost);
+    elements.costUnit.textContent = 'kr';
 
-        elements.timeLabel.textContent = 'Bespart kostnad';
-        elements.timeValue.textContent = formatCurrency(savedCost);
-        elements.timeUnit.textContent = 'kr';
+    elements.timeLabel.textContent = 'Bespart kostnad';
+    elements.timeValue.textContent = formatCurrency(savedCost);
+    elements.timeUnit.textContent = 'kr';
 
-        elements.materialLabel.textContent = 'Unngåtte utslipp';
-        elements.materialSavings.textContent = formatNumber(avoidedEmissions, 1);
-        elements.materialSavingsUnit.textContent = 'kgCO2e';
-    } else {
-        elements.costLabel.textContent = 'Estimert kostnad (renovering)';
-        elements.costValue.textContent = formatCurrency(rehabCost);
-        elements.costUnit.textContent = 'kr';
-
-        elements.timeLabel.textContent = 'Bespart kostnad';
-        elements.timeValue.textContent = formatCurrency(0);
-        elements.timeUnit.textContent = 'kr';
-
-        elements.materialLabel.textContent = 'Unngåtte utslipp';
-        elements.materialSavings.textContent = formatNumber(0, 1);
-        elements.materialSavingsUnit.textContent = 'kgCO2e';
-    }
+    elements.materialLabel.textContent = 'Unngåtte utslipp';
+    elements.materialSavings.textContent = formatNumber(avoidedEmissions, 1);
+    elements.materialSavingsUnit.textContent = 'kgCO2e';
 
     animateResults();
 }
@@ -184,20 +169,6 @@ function handleNextStep() {
     elements.leadFormSection.scrollIntoView({ behavior: 'smooth' });
 }
 
-function handleViewToggle(view) {
-    currentView = view;
-
-    elements.toggleBtns.forEach((btn) => {
-        if (btn.dataset.view === view) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
-
-    updateDisplay();
-}
-
 function handleLeadSubmit(e) {
     e.preventDefault();
 
@@ -226,12 +197,6 @@ function initializeCalculator() {
 
     elements.nextBtn.addEventListener('click', handleNextStep);
 
-    elements.toggleBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            handleViewToggle(btn.dataset.view);
-        });
-    });
-
     elements.leadForm.addEventListener('submit', handleLeadSubmit);
 
     const submitBtn = document.getElementById('submitBtn');
@@ -249,7 +214,6 @@ function init() {
         leadFormSection: document.getElementById('leadFormSection'),
         leadForm: document.getElementById('leadForm'),
         resultsSection: document.getElementById('resultsSection'),
-        toggleBtns: document.querySelectorAll('.tab-btn'),
         costLabel: document.getElementById('costLabel'),
         costValue: document.getElementById('costValue'),
         costUnit: document.getElementById('costUnit'),
