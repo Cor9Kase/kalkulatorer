@@ -109,19 +109,20 @@
 
             <div class="metrikk-grid">
                 <div class="metrikk-card">
-                    <div class="metrikk-label">Estimert utslipp (M-Tek)</div>
-                    <div class="metrikk-value"><span id="costValue">0</span> <span class="metrikk-unit">kgCO2e</span></div>
+                    <div class="metrikk-label" id="costLabel">Estimert kostnad (M-Tek)</div>
+                    <div class="metrikk-value"><span id="costValue">0</span> <span class="metrikk-unit" id="costUnit">kr</span></div>
                 </div>
                 <div class="metrikk-card">
-                    <div class="metrikk-label">Unngåtte utslipp</div>
-                    <div class="metrikk-value"><span id="timeValue">0</span></div>
+                    <div class="metrikk-label" id="timeLabel">Bespart kostnad</div>
+                    <div class="metrikk-value"><span id="timeValue">0</span> <span class="metrikk-unit" id="timeUnit">kr</span></div>
                 </div>
                 <div class="metrikk-card">
-                    <div class="metrikk-label">Utslippsreduksjon i prosent</div>
-                    <div class="metrikk-value"><span id="materialSavings">95</span><span class="metrikk-unit">%</span>
+                    <div class="metrikk-label" id="materialLabel">Unngåtte utslipp</div>
+                    <div class="metrikk-value"><span id="materialSavings">0</span><span class="metrikk-unit" id="materialSavingsUnit">kgCO2e</span>
                     </div>
                 </div>
             </div>
+            <p style="text-align:center; margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">Beregnet med <span id="metaArea">6 m²</span> og rehab-tid fra Ark2: <span id="metaDays">25 døgn</span>.</p>
 
             <div style="text-align: center; margin-top: 2rem;">
                 <a href="https://m-tek.no/kontakt" class="btn-mtek" style="max-width: 300px; margin: 0 auto;">

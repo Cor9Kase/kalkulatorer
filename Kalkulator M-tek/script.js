@@ -6,7 +6,6 @@
 // Formulas are scaled from B22=5 and expressed as fixed + per m2 coefficients.
 const emissionsData = {
     mtekEstimate: {
-        // Case 1 + Case 2 (single estimate shown to users)
         materialFixed: 2.772268831128445,
         transportFixed: 46.08,
         wasteFixed: 0.31166493604653883,
@@ -14,7 +13,6 @@ const emissionsData = {
         wastePerSqm: 3.627543711527616
     },
     demolition: {
-        // Base case - Rive bad uten gjenbruk
         materialFixed: 0,
         transportFixed: 276.48,
         wasteFixed: 0,
@@ -22,6 +20,31 @@ const emissionsData = {
         wastePerSqm: 50.697377709796484
     }
 };
+
+// ===================================
+// PRICE DATA (Ark2 + Resultat - M-tek)
+// ===================================
+
+const rehabLookup = {
+    2: { cost: 299000, days: 25 }, 3: { cost: 312000, days: 25 }, 4: { cost: 322000, days: 25 },
+    5: { cost: 338000, days: 25 }, 6: { cost: 353000, days: 25 }, 7: { cost: 368000, days: 25 },
+    8: { cost: 378000, days: 25 }, 9: { cost: 398000, days: 25 }, 10: { cost: 413000, days: 25 },
+    11: { cost: 428000, days: 30 }, 12: { cost: 443000, days: 30 }, 13: { cost: 443000, days: 30 },
+    14: { cost: 453000, days: 30 }, 15: { cost: 453000, days: 30 }, 16: { cost: 463000, days: 30 },
+    17: { cost: 463000, days: 30 }, 18: { cost: 473000, days: 30 }, 19: { cost: 483000, days: 30 },
+    20: { cost: 493000, days: 30 }, 21: { cost: 503000, days: 30 }, 22: { cost: 513000, days: 30 },
+    23: { cost: 523000, days: 30 }, 24: { cost: 533000, days: 30 }, 25: { cost: 543000, days: 30 }
+};
+
+const mtekPrice = {
+    cost: 9000,
+    days: 1
+};
+
+function normalizeAreaForLookup(area) {
+    const rounded = Math.round(area);
+    return Math.min(25, Math.max(2, rounded));
+}
 
 // ===================================
 // STATE MANAGEMENT
@@ -64,22 +87,17 @@ function calculateDemolitionEstimate(area) {
 // FORMATTING FUNCTIONS
 // ===================================
 
-function formatNumber(amount) {
+function formatNumber(amount, digits = 1) {
     return new Intl.NumberFormat('nb-NO', {
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 1
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
     }).format(amount);
 }
 
-function formatKg(amount) {
-    return `${formatNumber(amount)} kgCO2e`;
-}
-
-function formatPercent(value) {
+function formatCurrency(amount) {
     return new Intl.NumberFormat('nb-NO', {
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 1
-    }).format(value);
+        maximumFractionDigits: 0
+    }).format(amount);
 }
 
 // ===================================
@@ -90,26 +108,47 @@ function updateDisplay() {
     if (!isLeadSubmitted) return;
 
     const { area } = currentInputs;
+    const areaKey = normalizeAreaForLookup(area);
+    const rehab = rehabLookup[areaKey];
+
     const mtek = calculateMtekEstimate(area);
     const demolition = calculateDemolitionEstimate(area);
+    const avoidedEmissions = Math.max(demolition.total - mtek.total, 0);
 
-    const avoided = Math.max(demolition.total - mtek.total, 0);
-    const reductionPct = demolition.total > 0 ? (avoided / demolition.total) * 100 : 0;
+    const rehabCost = rehab.cost;
+    const savedCost = Math.max(rehabCost - mtekPrice.cost, 0);
+
+    if (elements.metaArea) {
+        elements.metaArea.textContent = `${areaKey} m²`;
+    }
+    if (elements.metaDays) {
+        elements.metaDays.textContent = `${rehab.days} døgn`;
+    }
 
     if (currentView === 'repair') {
-        elements.costValue.textContent = formatNumber(mtek.total);
-        elements.timeValue.textContent = formatKg(avoided);
+        elements.costLabel.textContent = 'Estimert kostnad (M-Tek)';
+        elements.costValue.textContent = formatCurrency(mtekPrice.cost);
+        elements.costUnit.textContent = 'kr';
 
-        if (elements.materialSavings) {
-            elements.materialSavings.textContent = formatPercent(reductionPct);
-        }
+        elements.timeLabel.textContent = 'Bespart kostnad';
+        elements.timeValue.textContent = formatCurrency(savedCost);
+        elements.timeUnit.textContent = 'kr';
+
+        elements.materialLabel.textContent = 'Unngåtte utslipp';
+        elements.materialSavings.textContent = formatNumber(avoidedEmissions, 1);
+        elements.materialSavingsUnit.textContent = 'kgCO2e';
     } else {
-        elements.costValue.textContent = formatNumber(demolition.total);
-        elements.timeValue.textContent = formatKg(0);
+        elements.costLabel.textContent = 'Estimert kostnad (renovering)';
+        elements.costValue.textContent = formatCurrency(rehabCost);
+        elements.costUnit.textContent = 'kr';
 
-        if (elements.materialSavings) {
-            elements.materialSavings.textContent = '0,0';
-        }
+        elements.timeLabel.textContent = 'Bespart kostnad';
+        elements.timeValue.textContent = formatCurrency(0);
+        elements.timeUnit.textContent = 'kr';
+
+        elements.materialLabel.textContent = 'Unngåtte utslipp';
+        elements.materialSavings.textContent = formatNumber(0, 1);
+        elements.materialSavingsUnit.textContent = 'kgCO2e';
     }
 
     animateResults();
@@ -167,8 +206,6 @@ function handleLeadSubmit(e) {
     const email = document.getElementById('leadEmail') ? document.getElementById('leadEmail').value : document.getElementById('email').value;
 
     if (name && phone && email) {
-        console.log('Lead captured for M-Tek:', { name, phone, email, area: currentInputs.area });
-
         isLeadSubmitted = true;
         elements.leadFormSection.classList.add('hidden');
         elements.resultsSection.classList.remove('hidden');
@@ -213,9 +250,17 @@ function init() {
         leadForm: document.getElementById('leadForm'),
         resultsSection: document.getElementById('resultsSection'),
         toggleBtns: document.querySelectorAll('.tab-btn'),
+        costLabel: document.getElementById('costLabel'),
         costValue: document.getElementById('costValue'),
+        costUnit: document.getElementById('costUnit'),
+        timeLabel: document.getElementById('timeLabel'),
         timeValue: document.getElementById('timeValue'),
-        materialSavings: document.getElementById('materialSavings')
+        timeUnit: document.getElementById('timeUnit'),
+        materialLabel: document.getElementById('materialLabel'),
+        materialSavings: document.getElementById('materialSavings'),
+        materialSavingsUnit: document.getElementById('materialSavingsUnit'),
+        metaArea: document.getElementById('metaArea'),
+        metaDays: document.getElementById('metaDays')
     };
 
     currentInputs = {
@@ -223,8 +268,6 @@ function init() {
     };
 
     initializeCalculator();
-
-    console.log('M-Tek estimator initialized with Resultat - M-tek baseline');
 }
 
 if (document.readyState === 'loading') {

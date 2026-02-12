@@ -118,10 +118,10 @@ window.onload = function () {
         { value: 'Terskel', label: 'Terskel', type: 'fixed', data: { CO2e: 50.451139066157886, COST: 15000, DAYS: 2 } },
         { value: 'Dusjnisje', label: 'Dusjnisje', type: 'fixed', data: { CO2e: 664.2903186439871, COST: 120000, DAYS: 5 } },
         {
-            value: 'Vegg',
-            label: 'Vegg',
+            value: 'Flisrep',
+            label: 'Skadet flis',
             type: 'wall',
-            // Grounded in "Resultat - M-tett" (Case 5: Vegg),
+            // Grounded in "Resultat - M-tett" (Case 5: Flisrep),
             // calibrated to match sheet outputs at 6 and 9 m2.
             data: { co2Intercept: 36.9111999434392, co2SlopePerSqm: 114.6148000094268, COST: 90000, DAYS: 7 }
         },
