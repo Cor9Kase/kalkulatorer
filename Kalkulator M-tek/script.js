@@ -98,14 +98,14 @@ function updateDisplay() {
 
     if (currentView === 'repair') {
         elements.costValue.textContent = formatNumber(mtek.total);
-        elements.timeValue.textContent = formatKg(avoided);
+        elements.timeValue.textContent = formatKg(avoided) + " spart";
 
         if (elements.materialSavings) {
             elements.materialSavings.textContent = formatPercent(reductionPct);
         }
     } else {
         elements.costValue.textContent = formatNumber(demolition.total);
-        elements.timeValue.textContent = formatKg(0);
+        elements.timeValue.textContent = formatKg(0) + " spart";
 
         if (elements.materialSavings) {
             elements.materialSavings.textContent = '0,0';

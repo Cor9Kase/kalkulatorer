@@ -104,12 +104,12 @@ window.onload = function () {
     };
 
     const M_TETT_CASES = [
-        { value: 'Slukrep', label: 'Sluk', type: 'fixed', data: { CO2e: 41.8, COST: 35000, DAYS: 3 } },
-        { value: 'Gulv', label: 'Gulv', type: 'scaled', data: { refCO2e: 1627.9, refCOST: 130000, DAYS: 7 } },
-        { value: 'Sisterne', label: 'Sisterne', type: 'fixed', data: { CO2e: 233.7, COST: 65000, DAYS: 5 } },
-        { value: 'Terskel', label: 'Terskel', type: 'fixed', data: { CO2e: 50.5, COST: 15000, DAYS: 2 } },
-        { value: 'Dusjnisje', label: 'Dusjnisje', type: 'fixed', data: { CO2e: 664.3, COST: 120000, DAYS: 5 } },
-        { value: 'Vegg', label: 'Vegg', type: 'fixed', data: { CO2e: 1068.4, COST: 90000, DAYS: 7 } },
+        { value: 'Slukrep', label: 'Sluk', type: 'fixed', data: { CO2e: 41.847333005119644, COST: 35000, DAYS: 3 } },
+        { value: 'Gulv', label: 'Gulv', type: 'scaled', data: { refCO2e: 1627.8694474703302, refCOST: 130000, DAYS: 7 } },
+        { value: 'Sisterne', label: 'Sisterne', type: 'fixed', data: { CO2e: 233.74103626466453, COST: 65000, DAYS: 5 } },
+        { value: 'Terskel', label: 'Terskel', type: 'fixed', data: { CO2e: 50.451139066157886, COST: 15000, DAYS: 2 } },
+        { value: 'Dusjnisje', label: 'Dusjnisje', type: 'fixed', data: { CO2e: 664.2903186439871, COST: 120000, DAYS: 5 } },
+        { value: 'Vegg', label: 'Vegg', type: 'fixed', data: { CO2e: 1068.4444000282804, COST: 90000, DAYS: 7 } },
     ];
 
     const REFERENCE_AREA = 9;
@@ -163,7 +163,7 @@ window.onload = function () {
         const baseLookup = BASE_CASE_LOOKUP[Math.min(25, Math.max(2, lookupArea))];
         const baseCostTotal = baseLookup.cost;
         const baseDowntime = baseLookup.days;
-        let baseCO2eTotal = 426 + (232.5 * A);
+        let baseCO2eTotal = 425.75 + (232.5 * A);
 
         // M-Tett Case
         let mTettCO2e, mTettCost, mTettTime;
