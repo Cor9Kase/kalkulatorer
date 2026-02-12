@@ -105,14 +105,27 @@ window.onload = function () {
 
     const M_TETT_CASES = [
         { value: 'Slukrep', label: 'Sluk', type: 'fixed', data: { CO2e: 41.847333005119644, COST: 35000, DAYS: 3 } },
-        { value: 'Gulv', label: 'Gulv', type: 'scaled', data: { refCO2e: 1627.8694474703302, refCOST: 130000, DAYS: 7 } },
+        {
+            value: 'Gulv',
+            label: 'Gulv',
+            type: 'wholeFloor',
+            // Grounded in "Resultat - M-tett" (Case 2: Hele gulv),
+            // calibrated to match sheet outputs at 6 and 9 m2.
+            // totalCO2e = intercept + slope * area
+            data: { co2Intercept: 433.3611050593396, co2SlopePerSqm: 132.72314915677674, COST: 130000, DAYS: 7 }
+        },
         { value: 'Sisterne', label: 'Sisterne', type: 'fixed', data: { CO2e: 233.74103626466453, COST: 65000, DAYS: 5 } },
         { value: 'Terskel', label: 'Terskel', type: 'fixed', data: { CO2e: 50.451139066157886, COST: 15000, DAYS: 2 } },
         { value: 'Dusjnisje', label: 'Dusjnisje', type: 'fixed', data: { CO2e: 664.2903186439871, COST: 120000, DAYS: 5 } },
-        { value: 'Vegg', label: 'Vegg', type: 'fixed', data: { CO2e: 1068.4444000282804, COST: 90000, DAYS: 7 } },
+        {
+            value: 'Vegg',
+            label: 'Vegg',
+            type: 'wall',
+            // Grounded in "Resultat - M-tett" (Case 5: Vegg),
+            // calibrated to match sheet outputs at 6 and 9 m2.
+            data: { co2Intercept: 36.9111999434392, co2SlopePerSqm: 114.6148000094268, COST: 90000, DAYS: 7 }
+        },
     ];
-
-    const REFERENCE_AREA = 9;
 
     // --- Actions ---
 
@@ -171,10 +184,17 @@ window.onload = function () {
             mTettCO2e = caseItem.data.CO2e;
             mTettCost = caseItem.data.COST;
             mTettTime = caseItem.data.DAYS;
+        } else if (caseItem.type === 'wholeFloor') {
+            mTettCO2e = caseItem.data.co2Intercept + (caseItem.data.co2SlopePerSqm * A);
+            mTettCost = caseItem.data.COST;
+            mTettTime = caseItem.data.DAYS;
+        } else if (caseItem.type === 'wall') {
+            mTettCO2e = caseItem.data.co2Intercept + (caseItem.data.co2SlopePerSqm * A);
+            mTettCost = caseItem.data.COST;
+            mTettTime = caseItem.data.DAYS;
         } else {
-            const factor = A / REFERENCE_AREA;
-            mTettCO2e = caseItem.data.refCO2e * factor;
-            mTettCost = caseItem.data.refCOST * factor;
+            mTettCO2e = caseItem.data.CO2e;
+            mTettCost = caseItem.data.COST;
             mTettTime = caseItem.data.DAYS;
         }
 
