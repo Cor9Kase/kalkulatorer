@@ -40,6 +40,8 @@ const mtekPrice = {
     cost: 9000,
     days: 1
 };
+const CALCULATION_DELAY_MS = 1000;
+const CALCULATING_LABEL = 'Kalkulerer...';
 
 function normalizeAreaForLookup(area) {
     const rounded = Math.round(area);
@@ -54,6 +56,13 @@ let currentInputs = {
     area: 6
 };
 let isLeadSubmitted = false;
+let isResultTransitioning = false;
+const metricAnimationState = {
+    cost: { value: 0, rafId: null, timeoutId: null },
+    savings: { value: 0, rafId: null, timeoutId: null },
+    emissions: { value: 0, rafId: null, timeoutId: null }
+};
+let metricAnimationSequence = 0;
 
 // ===================================
 // DOM ELEMENTS
@@ -99,6 +108,32 @@ function formatCurrency(amount) {
     }).format(amount);
 }
 
+function easeOutCubic(progress) {
+    return 1 - Math.pow(1 - progress, 3);
+}
+
+function setButtonLoadingState(button, isLoading, label = CALCULATING_LABEL) {
+    if (!button) return;
+
+    if (isLoading) {
+        if (!button.dataset.originalHtml) {
+            button.dataset.originalHtml = button.innerHTML;
+        }
+        button.classList.add('is-loading');
+        button.setAttribute('aria-busy', 'true');
+        button.disabled = true;
+        button.textContent = label;
+        return;
+    }
+
+    if (button.dataset.originalHtml) {
+        button.innerHTML = button.dataset.originalHtml;
+    }
+    button.classList.remove('is-loading');
+    button.removeAttribute('aria-busy');
+    button.disabled = false;
+}
+
 // ===================================
 // UI UPDATE FUNCTIONS
 // ===================================
@@ -125,18 +160,84 @@ function updateDisplay() {
     }
 
     elements.costLabel.textContent = 'Estimert kostnad (M-Tek)';
-    elements.costValue.textContent = formatCurrency(mtekPrice.cost);
     elements.costUnit.textContent = 'kr';
 
     elements.timeLabel.textContent = 'Bespart kostnad';
-    elements.timeValue.textContent = formatCurrency(savedCost);
     elements.timeUnit.textContent = 'kr';
 
     elements.materialLabel.textContent = 'Unngåtte utslipp';
-    elements.materialSavings.textContent = formatNumber(avoidedEmissions, 1);
     elements.materialSavingsUnit.textContent = 'kgCO2e';
 
+    animateMetricsSequential(mtekPrice.cost, savedCost, avoidedEmissions);
+
     animateResults();
+}
+
+function animateMetricsSequential(cost, savings, emissions) {
+    metricAnimationSequence += 1;
+    const sequenceId = metricAnimationSequence;
+
+    animateMetricValue('cost', elements.costValue, cost, (value) => formatCurrency(Math.round(value)), 700, 0, sequenceId);
+    animateMetricValue('savings', elements.timeValue, savings, (value) => formatCurrency(Math.round(value)), 800, 350, sequenceId);
+    animateMetricValue('emissions', elements.materialSavings, emissions, (value) => formatNumber(value, 1), 900, 760, sequenceId);
+}
+
+function animateMetricValue(key, element, target, formatter, duration = 900, delay = 0, sequenceId = metricAnimationSequence) {
+    if (!element || !metricAnimationState[key]) return;
+
+    const state = metricAnimationState[key];
+
+    if (state.rafId) {
+        cancelAnimationFrame(state.rafId);
+    }
+    if (state.timeoutId) {
+        clearTimeout(state.timeoutId);
+    }
+
+    const from = state.value;
+
+    function startAnimation() {
+        if (sequenceId !== metricAnimationSequence) return;
+
+        const startTime = performance.now();
+
+        function step(timestamp) {
+            if (sequenceId !== metricAnimationSequence) {
+                state.rafId = null;
+                return;
+            }
+
+            const elapsed = timestamp - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easedProgress = easeOutCubic(progress);
+            const currentValue = from + (target - from) * easedProgress;
+
+            state.value = currentValue;
+            element.textContent = formatter(currentValue);
+
+            if (progress < 1) {
+                state.rafId = requestAnimationFrame(step);
+                return;
+            }
+
+            state.value = target;
+            state.rafId = null;
+            element.textContent = formatter(target);
+        }
+
+        state.rafId = requestAnimationFrame(step);
+    }
+
+    if (delay > 0) {
+        state.timeoutId = setTimeout(() => {
+            state.timeoutId = null;
+            startAnimation();
+        }, delay);
+        return;
+    }
+
+    state.timeoutId = null;
+    startAnimation();
 }
 
 function animateResults() {
@@ -149,6 +250,16 @@ function animateResults() {
     });
 }
 
+function updateSliderVisual(value) {
+    if (!elements.areaSlider) return;
+
+    const min = parseFloat(elements.areaSlider.min) || 0;
+    const max = parseFloat(elements.areaSlider.max) || 100;
+    const percentage = ((value - min) / (max - min)) * 100;
+
+    elements.areaSlider.style.setProperty('--slider-progress', `${percentage}%`);
+}
+
 // ===================================
 // EVENT HANDLERS
 // ===================================
@@ -159,6 +270,7 @@ function handleAreaChange(value) {
         currentInputs.area = numValue;
         elements.areaDisplay.textContent = numValue;
         elements.areaSlider.value = numValue;
+        updateSliderVisual(numValue);
         updateDisplay();
     }
 }
@@ -171,19 +283,26 @@ function handleNextStep() {
 
 function handleLeadSubmit(e) {
     e.preventDefault();
+    if (isResultTransitioning || !elements.leadForm) return;
+    if (!elements.leadForm.checkValidity()) {
+        elements.leadForm.reportValidity();
+        return;
+    }
 
-    const name = document.getElementById('leadName') ? document.getElementById('leadName').value : document.getElementById('name').value;
-    const phone = document.getElementById('leadPhone') ? document.getElementById('leadPhone').value : document.getElementById('phone').value;
-    const email = document.getElementById('leadEmail') ? document.getElementById('leadEmail').value : document.getElementById('email').value;
+    const submitButton = e.submitter || elements.leadForm.querySelector('button[type="submit"]');
+    isResultTransitioning = true;
+    setButtonLoadingState(submitButton, true);
 
-    if (name && phone && email) {
+    setTimeout(() => {
         isLeadSubmitted = true;
         elements.leadFormSection.classList.add('hidden');
         elements.resultsSection.classList.remove('hidden');
 
         updateDisplay();
         elements.resultsSection.scrollIntoView({ behavior: 'smooth' });
-    }
+        setButtonLoadingState(submitButton, false);
+        isResultTransitioning = false;
+    }, CALCULATION_DELAY_MS);
 }
 
 // ===================================
@@ -230,6 +349,11 @@ function init() {
     currentInputs = {
         area: elements.areaSlider ? parseFloat(elements.areaSlider.value) : 6
     };
+
+    if (elements.areaDisplay) {
+        elements.areaDisplay.textContent = currentInputs.area;
+    }
+    updateSliderVisual(currentInputs.area);
 
     initializeCalculator();
 }

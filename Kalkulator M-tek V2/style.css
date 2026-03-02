@@ -1,0 +1,603 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --mtek-navy: #23635E;
+    --mtek-navy-dark: #17393A;
+    --mtek-blue: #41BBB0;
+    --mtek-gold: #9A6E1F;
+    --white: #FFFFFF;
+    --bg-light: #ECF3F2;
+    --border-light: #C7D7D6;
+    --text-main: #1B3A3A;
+    --text-muted: #567474;
+    --surface-soft: #EFF4F3;
+    --slider-rest: #B8CCC9;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --shadow-base: 0 8px 20px -12px rgba(23, 57, 58, 0.22);
+    --shadow-lg: 0 28px 45px -35px rgba(23, 57, 58, 0.35);
+}
+
+.calc-container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 16px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+.dashboard-card {
+    background: var(--surface-soft);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.diag-panel,
+.lead-overlay,
+.result-display {
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+    background: var(--surface-soft);
+}
+
+.panel-header {
+    margin-bottom: 1.4rem;
+}
+
+.panel-header h3 {
+    font-size: clamp(1.35rem, 3vw, 1.7rem);
+    font-weight: 800;
+    color: var(--mtek-navy-dark);
+    line-height: 1.25;
+}
+
+.panel-sub {
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.panel-header-center {
+    text-align: center;
+}
+
+.input-module {
+    background: linear-gradient(180deg, #f8fbfa 0%, #e7f0ef 100%);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: clamp(1.2rem, 3vw, 1.8rem);
+}
+
+.input-module label {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 1.35rem;
+}
+
+.label-text {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.area-val {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 0.28rem;
+    color: var(--mtek-navy);
+    font-weight: 800;
+}
+
+.area-val span:first-child {
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    line-height: 0.95;
+}
+
+.area-val span:last-child {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    padding-bottom: 0.35rem;
+}
+
+.custom-slider {
+    --slider-progress: 8.3%;
+    width: 100%;
+    height: 16px;
+    border-radius: 999px;
+    background: linear-gradient(90deg,
+            var(--mtek-navy) 0%,
+            var(--mtek-navy) var(--slider-progress),
+            var(--slider-rest) var(--slider-progress),
+            var(--slider-rest) 100%);
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+}
+
+.custom-slider::-webkit-slider-runnable-track {
+    height: 16px;
+    border-radius: 999px;
+    background: transparent;
+}
+
+.custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 36px;
+    height: 36px;
+    margin-top: -10px;
+    border: 4px solid var(--white);
+    border-radius: 50%;
+    background: var(--mtek-blue);
+    box-shadow: 0 6px 14px -8px rgba(23, 57, 58, 0.45);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.custom-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.06);
+}
+
+.custom-slider::-moz-range-track {
+    height: 16px;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg,
+            var(--mtek-navy) 0%,
+            var(--mtek-navy) var(--slider-progress),
+            var(--slider-rest) var(--slider-progress),
+            var(--slider-rest) 100%);
+}
+
+.custom-slider::-moz-range-thumb {
+    width: 36px;
+    height: 36px;
+    border: 4px solid var(--white);
+    border-radius: 50%;
+    background: var(--mtek-blue);
+    box-shadow: 0 6px 14px -8px rgba(23, 57, 58, 0.45);
+    cursor: pointer;
+}
+
+.slider-range {
+    margin-top: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.btn-mtek {
+    margin-top: 1.25rem;
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--mtek-blue);
+    color: var(--white);
+    padding: 1rem 1.4rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.16s ease, background-color 0.16s ease;
+}
+
+.btn-mtek:hover {
+    background: var(--mtek-navy);
+    transform: translateY(-1px);
+}
+
+.btn-mtek.is-loading {
+    opacity: 0.85;
+    cursor: wait;
+    pointer-events: none;
+}
+
+.btn-mtek.is-loading:hover {
+    background: var(--mtek-blue);
+    transform: none;
+}
+
+.lead-overlay {
+    border-top: 1px solid var(--border-light);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.85rem;
+}
+
+.form-field label {
+    display: block;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--mtek-navy-dark);
+    margin-bottom: 0.35rem;
+}
+
+.form-field input,
+.form-field textarea {
+    width: 100%;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    background: var(--bg-light);
+    color: var(--text-main);
+    padding: 0.95rem 1rem;
+    font-size: 1rem;
+}
+
+.form-field textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+    outline: none;
+    border-color: var(--mtek-blue);
+    box-shadow: 0 0 0 3px rgba(65, 187, 176, 0.2);
+    background: var(--white);
+}
+
+.quote-section {
+    margin-top: 1.65rem;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    background: #edf4f3;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.quote-section h3 {
+    font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+    line-height: 1.25;
+    color: var(--mtek-navy);
+    margin-bottom: 0.45rem;
+    font-weight: 700;
+}
+
+.quote-section>p {
+    color: var(--text-muted);
+    font-size: 0.89rem;
+    line-height: 1.45;
+    max-width: 66ch;
+}
+
+.quote-form {
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
+    border-top: 1px dashed #b7cbc9;
+    display: grid;
+    gap: 0.85rem;
+}
+
+.quote-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.quote-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.quote-grid-1 {
+    grid-template-columns: 1fr;
+}
+
+.privacy-note {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.quote-section .btn-mtek {
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.quote-success {
+    margin-top: 0.35rem;
+    font-size: 0.9rem;
+    color: var(--mtek-navy);
+    font-weight: 600;
+}
+
+.result-display {
+    border-top: 1px solid var(--border-light);
+}
+
+.metrikk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1.05rem;
+    margin-top: 0.15rem;
+}
+
+.metrikk-card {
+    --card-accent: var(--mtek-blue);
+    position: relative;
+    container-type: inline-size;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1.4rem 1.05rem 1.3rem;
+    text-align: center;
+    background: var(--white);
+    box-shadow: 0 16px 30px -30px rgba(23, 57, 58, 0.35);
+    overflow: hidden;
+}
+
+.metrikk-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 5px;
+    background: var(--card-accent);
+}
+
+.metrikk-card--cost {
+    --card-accent: var(--mtek-navy-dark);
+    border-color: #9fc9c4;
+    background: linear-gradient(180deg, #dcece9 0%, #eaf3f1 100%);
+}
+
+.metrikk-card--savings {
+    --card-accent: var(--mtek-blue);
+    border-color: #9ed8d2;
+    background: linear-gradient(180deg, #def2ef 0%, #ecf8f6 100%);
+}
+
+.metrikk-card--emissions {
+    --card-accent: var(--mtek-gold);
+    border-color: #dfcfad;
+    background: linear-gradient(180deg, #f1e5c9 0%, #f8f1e2 100%);
+}
+
+.metrikk-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 0.85rem;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+.metrikk-value {
+    --metric-size: clamp(1.9rem, 4.6vw, 2.5rem);
+    --metric-unit-size: clamp(0.92rem, 2.1vw, 1.06rem);
+    --metric-gap: 0.34rem;
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: var(--metric-gap);
+    max-width: 100%;
+    min-width: 0;
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+}
+
+.metrikk-value > span:first-child {
+    font-size: var(--metric-size);
+    font-weight: 800;
+    color: var(--mtek-navy-dark);
+    font-variant-numeric: tabular-nums lining-nums;
+    white-space: nowrap;
+}
+
+.metrikk-unit {
+    color: var(--card-accent);
+    font-size: var(--metric-unit-size);
+    font-weight: 700;
+    white-space: nowrap;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+@supports (font-size: 1cqw) {
+    .metrikk-label {
+        font-size: clamp(0.64rem, 2.8cqw, 0.74rem);
+    }
+
+    .metrikk-value {
+        --metric-size: clamp(1.45rem, 15cqw, 2.75rem);
+        --metric-unit-size: clamp(0.84rem, 5.8cqw, 1.12rem);
+        --metric-gap: clamp(0.2rem, 1.25cqw, 0.4rem);
+    }
+}
+
+.benefit-examples {
+    margin-top: 0.95rem;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.benefit-example {
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    background: #edf4f3;
+    padding: 0.85rem;
+}
+
+.benefit-example-title {
+    font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+    letter-spacing: 0.01em;
+    text-transform: none;
+    text-align: center;
+    color: var(--mtek-navy-dark);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+}
+
+.benefit-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.65rem;
+}
+
+.benefit-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.4rem;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    background: #f8fbfb;
+    padding: 0.75rem 0.6rem 0.8rem;
+}
+
+.benefit-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #d6ebe8;
+    color: var(--mtek-blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.benefit-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.benefit-heading {
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--mtek-navy-dark);
+}
+
+.benefit-text {
+    font-size: 0.85rem;
+    line-height: 1.35;
+    color: var(--text-muted);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 640px) {
+    .calc-container {
+        padding: 0 12px;
+    }
+
+    .panel-sub {
+        font-size: 0.94rem;
+    }
+
+    .quote-grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .custom-slider {
+        height: 14px;
+    }
+
+    .custom-slider::-webkit-slider-runnable-track {
+        height: 14px;
+    }
+
+    .custom-slider::-webkit-slider-thumb {
+        width: 30px;
+        height: 30px;
+        margin-top: -8px;
+    }
+
+    .custom-slider::-moz-range-track {
+        height: 14px;
+    }
+
+    .custom-slider::-moz-range-thumb {
+        width: 30px;
+        height: 30px;
+    }
+
+    .benefit-examples {
+        margin-top: 0.75rem;
+        gap: 0.6rem;
+    }
+
+    .benefit-example {
+        padding: 0.75rem;
+    }
+
+    .benefit-list {
+        grid-template-columns: 1fr;
+        gap: 0.55rem;
+    }
+
+    .benefit-line {
+        align-items: flex-start;
+        text-align: left;
+        padding: 0.7rem;
+    }
+
+    .benefit-heading {
+        font-size: 0.95rem;
+    }
+
+    .benefit-text {
+        font-size: 0.84rem;
+    }
+
+    .quote-section {
+        margin-top: 1.2rem;
+        padding: 0.85rem;
+    }
+
+    .quote-section>p {
+        font-size: 0.86rem;
+    }
+
+    .quote-section .btn-mtek {
+        max-width: 100%;
+    }
+
+    .metrikk-card {
+        padding: 1.2rem 0.9rem 1.1rem;
+    }
+
+    .metrikk-value {
+        --metric-size: clamp(1.65rem, 10vw, 2.25rem);
+        --metric-unit-size: clamp(0.88rem, 5vw, 1.02rem);
+        --metric-gap: 0.25rem;
+    }
+}

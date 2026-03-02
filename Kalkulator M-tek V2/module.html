@@ -1,0 +1,147 @@
+<div class="calc-container">
+    <div class="dashboard-card">
+        <div class="diag-panel" id="inputSection">
+            <div class="panel-header">
+                <h3>Hva er størrelsen på rommet?</h3>
+            </div>
+
+            <div class="input-module">
+                <label for="areaSlider">
+                    <span class="label-text">Areal</span>
+                    <span class="area-val"><span id="areaDisplay">6</span><span>m²</span></span>
+                </label>
+                <input type="range" id="areaSlider" class="custom-slider" min="2" max="50" value="6" step="0.5">
+                <div class="slider-range">
+                    <span>2 m²</span>
+                    <span>50 m²</span>
+                </div>
+            </div>
+
+            <button id="nextBtn" class="btn-mtek">
+                Fortsett
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </button>
+
+            <div class="benefit-examples">
+                <section class="benefit-example">
+                    <h4 class="benefit-example-title">Hvorfor velge M-tek:</h4>
+                    <div class="benefit-list">
+                        <article class="benefit-line">
+                            <span class="benefit-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M3 12h4l2-5 4 10 2-5h6" />
+                                </svg>
+                            </span>
+                            <span class="benefit-heading">Punktreparasjon</span>
+                            <span class="benefit-text">Vi lokaliserer feilen og reparerer kun nødvendig område.</span>
+                        </article>
+                        <article class="benefit-line">
+                            <span class="benefit-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 3l7 4v5c0 5-3.5 9-7 10-3.5-1-7-5-7-10V7l7-4z" />
+                                </svg>
+                            </span>
+                            <span class="benefit-heading">Bærekraft</span>
+                            <span class="benefit-text">Eksisterende gulv beholdes og materialbruken reduseres kraftig.</span>
+                        </article>
+                        <article class="benefit-line">
+                            <span class="benefit-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <path d="M12 7v5l3 2"></path>
+                                </svg>
+                            </span>
+                            <span class="benefit-heading">Rask utbedring</span>
+                            <span class="benefit-text">Normalt ferdig på en arbeidsdag med minimal forstyrrelse.</span>
+                        </article>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="result-display hidden">
+            <div class="metrikk-grid">
+                <div class="metrikk-card metrikk-card--cost">
+                    <div class="metrikk-label" id="costLabel">Estimert kostnad (M-Tek)</div>
+                    <div class="metrikk-value"><span id="costValue">0</span> <span class="metrikk-unit" id="costUnit">kr</span></div>
+                </div>
+                <div class="metrikk-card metrikk-card--savings">
+                    <div class="metrikk-label" id="timeLabel">Bespart kostnad</div>
+                    <div class="metrikk-value"><span id="timeValue">0</span> <span class="metrikk-unit" id="timeUnit">kr</span></div>
+                </div>
+                <div class="metrikk-card metrikk-card--emissions">
+                    <div class="metrikk-label" id="materialLabel">Unngåtte utslipp</div>
+                    <div class="metrikk-value"><span id="materialSavings">0</span><span class="metrikk-unit" id="materialSavingsUnit">kgCO2e</span></div>
+                </div>
+            </div>
+
+            <section id="quoteSection" class="quote-section">
+                <h3>Få et uforpliktende pristilbud!</h3>
+                <p>
+                    Har du ødelagte varmekabler på badet? Eller skadet membran? Har du lurt på om dere må rive hele
+                    badet og starte på nytt? M-TEK har en løsning som er mye billigere, raskere og mer miljøvennlig.
+                    Partiell utbedring løser feilen på dagen.
+                </p>
+
+                <form id="quoteForm" class="quote-form">
+                    <div class="quote-grid quote-grid-2">
+                        <div class="form-field">
+                            <label for="firstName">Fornavn</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Fornavn" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="lastName">Etternavn</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Etternavn" required>
+                        </div>
+                    </div>
+
+                    <div class="quote-grid quote-grid-1">
+                        <div class="form-field">
+                            <label for="address">Gateadresse*</label>
+                            <input type="text" id="address" name="address" placeholder="Hvor skal jobben utføres?" required>
+                        </div>
+                    </div>
+
+                    <div class="quote-grid quote-grid-2">
+                        <div class="form-field">
+                            <label for="postalCode">Postnummer*</label>
+                            <input type="text" id="postalCode" name="postalCode" inputmode="numeric" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="city">Poststed*</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                    </div>
+
+                    <div class="quote-grid quote-grid-2">
+                        <div class="form-field">
+                            <label for="contactEmail">E-post*</label>
+                            <input type="email" id="contactEmail" name="contactEmail" placeholder="E-postadresse" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="mobile">Mobilnummer*</label>
+                            <input type="tel" id="mobile" name="mobile" required>
+                        </div>
+                    </div>
+
+                    <div class="quote-grid quote-grid-1">
+                        <div class="form-field">
+                            <label for="helpText">Hva kan vi hjelpe deg med?</label>
+                            <textarea id="helpText" name="helpText"
+                                placeholder="Har det bare blitt kaldt i gulvet ditt, eller går sikringen når du setter på varmekabelen? Har elektriker målt feil på varmekabelen?"></textarea>
+                        </div>
+                    </div>
+
+                    <p class="privacy-note">Vi behandler personopplysninger som beskrevet i vår personvernerklæring.</p>
+                    <button type="submit" class="btn-mtek">Bestill befaring</button>
+                    <p id="quoteSuccess" class="quote-success hidden">Takk! Vi tar kontakt med deg så snart som mulig.</p>
+                </form>
+            </section>
+
+        </div>
+    </div>
+</div>

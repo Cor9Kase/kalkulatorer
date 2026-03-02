@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M-Tett - Besparelseskalkulator V2</title>
+    <meta name="description"
+        content="Beregn miljøgevinst, kostnadsbesparelse og redusert nedetid med M-Tett punktutbedring.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="calc-shell">
+        <div class="calc-container">
+            <div class="dashboard-card">
+                <section class="diag-panel" id="inputSection">
+                    <div class="panel-header">
+                        <h3>Velg areal og skadested</h3>
+                    </div>
+
+                    <div class="input-module">
+                        <label for="areaSlider">
+                            <span class="label-text">Areal</span>
+                            <span class="area-val"><span id="areaDisplay">6</span><span>m²</span></span>
+                        </label>
+                        <input type="range" id="areaSlider" class="custom-slider" min="2" max="25" value="6" step="1">
+                        <div class="slider-range">
+                            <span>2 m²</span>
+                            <span>25 m²</span>
+                        </div>
+                    </div>
+
+                    <div class="input-module">
+                        <div class="damage-label-row">
+                            <span class="label-text">Hvor er skaden?</span>
+                            <span id="selectedDamageText" class="damage-pill">Ikke valgt</span>
+                        </div>
+                        <div id="damageGrid" class="damage-grid"></div>
+                        <div id="step1Error" class="step-error hidden">Velg hvor skaden er før du går videre.</div>
+                    </div>
+
+                    <div class="estimate-actions">
+                        <button type="button" id="showEstimateBtn" class="btn-mtett">Vis estimat</button>
+                    </div>
+
+                    <div class="benefit-examples">
+                        <section class="benefit-example">
+                            <h4 class="benefit-example-title">Hvorfor velge M-Tett:</h4>
+                            <div class="benefit-list">
+                                <article class="benefit-line">
+                                    <span class="benefit-icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none">
+                                            <path d="M3 12h4l2-5 4 10 2-5h6" />
+                                        </svg>
+                                    </span>
+                                    <span class="benefit-heading">Presis utbedring</span>
+                                    <span class="benefit-text">Vi reparerer kun området med skade i stedet for å rive
+                                        hele badet.</span>
+                                </article>
+                                <article class="benefit-line">
+                                    <span class="benefit-icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none">
+                                            <path d="M12 3l7 4v5c0 5-3.5 9-7 10-3.5-1-7-5-7-10V7l7-4z" />
+                                        </svg>
+                                    </span>
+                                    <span class="benefit-heading">Stor miljøeffekt</span>
+                                    <span class="benefit-text">Materialforbruk og avfall reduseres betydelig mot
+                                        tradisjonell totalrenovering.</span>
+                                </article>
+                                <article class="benefit-line">
+                                    <span class="benefit-icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none">
+                                            <circle cx="12" cy="12" r="9"></circle>
+                                            <path d="M12 7v5l3 2"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="benefit-heading">Kortere nedetid</span>
+                                    <span class="benefit-text">Baderommet er raskere tilbake i normal bruk sammenlignet
+                                        med full rehabilitering.</span>
+                                </article>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+
+                <section id="resultsSection" class="result-display hidden">
+                    <div class="result-summary">
+                        <h3>Din estimerte besparelse med M-Tett</h3>
+                        <p><span id="resultArea">6 m²</span> · <span id="resultDamage">Ikke valgt</span></p>
+                    </div>
+
+                    <div class="metrikk-grid">
+                        <article class="metrikk-card metrikk-card--emissions">
+                            <div class="metrikk-label">Unngåtte utslipp</div>
+                            <div class="metrikk-value">
+                                <span id="savedCo2Value">0</span><span class="metrikk-unit">kg CO2e</span>
+                            </div>
+                        </article>
+                        <article class="metrikk-card metrikk-card--cost">
+                            <div class="metrikk-label">Spart kostnad</div>
+                            <div class="metrikk-value">
+                                <span id="savedCostValue">0</span><span class="metrikk-unit">kr</span>
+                            </div>
+                        </article>
+                        <article class="metrikk-card metrikk-card--time">
+                            <div class="metrikk-label">Spart tid</div>
+                            <div class="metrikk-value">
+                                <span id="savedTimeValue">0</span><span class="metrikk-unit">døgn</span>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="comparison-grid">
+                        <article class="comparison-card">
+                            <h4>Miljø (kg CO2e)</h4>
+                            <div class="comparison-row"><span>Riving</span><strong id="co2BaseValue">0</strong></div>
+                            <div class="comparison-row"><span>M-Tett</span><strong id="co2MtetValue">0</strong></div>
+                            <div class="comparison-row comparison-row--saved"><span>Spart</span><strong
+                                    id="co2SavedValue">0</strong></div>
+                        </article>
+                        <article class="comparison-card">
+                            <h4>Kostnad (kr)</h4>
+                            <div class="comparison-row"><span>Riving</span><strong id="costBaseValue">0</strong></div>
+                            <div class="comparison-row"><span>M-Tett</span><strong id="costMtetValue">0</strong></div>
+                            <div class="comparison-row comparison-row--saved"><span>Spart</span><strong
+                                    id="costSavedValue">0</strong></div>
+                        </article>
+                        <article class="comparison-card">
+                            <h4>Tidsbruk (døgn)</h4>
+                            <div class="comparison-row"><span>Riving</span><strong id="timeBaseValue">0</strong></div>
+                            <div class="comparison-row"><span>M-Tett</span><strong id="timeMtetValue">0</strong></div>
+                            <div class="comparison-row comparison-row--saved"><span>Spart</span><strong
+                                    id="timeSavedValue">0</strong></div>
+                        </article>
+                    </div>
+
+                    <section class="order-form-section" id="orderSection">
+                        <h3>Bestill befaring</h3>
+
+                        <form id="orderForm" class="order-form" novalidate>
+                            <div class="field-block">
+                                <p class="field-title">Proff/Privat*</p>
+                                <div class="choice-grid choice-grid-2">
+                                    <label class="choice-pill">
+                                        <input type="radio" name="customerType" value="proff" required>
+                                        <span>Proffkunde</span>
+                                    </label>
+                                    <label class="choice-pill">
+                                        <input type="radio" name="customerType" value="privat" required>
+                                        <span>Privatkunde</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-grid form-grid-2">
+                                <div class="form-field">
+                                    <label for="firstName">Fornavn (Bestiller)*</label>
+                                    <input type="text" id="firstName" name="firstName" required>
+                                </div>
+                                <div class="form-field">
+                                    <label for="lastName">Etternavn (Bestiller)*</label>
+                                    <input type="text" id="lastName" name="lastName" required>
+                                </div>
+                            </div>
+
+                            <div class="form-grid form-grid-2">
+                                <div class="form-field">
+                                    <label for="mobile">Mobilnummer*</label>
+                                    <input type="tel" id="mobile" name="mobile" required>
+                                </div>
+                                <div class="form-field">
+                                    <label for="contactEmail">E-post*</label>
+                                    <input type="email" id="contactEmail" name="contactEmail" required>
+                                </div>
+                            </div>
+
+                            <div class="section-divider">
+                                <h4>Hvor skal oppdraget gjennomføres?</h4>
+
+                                <div class="form-grid form-grid-1">
+                                    <div class="form-field">
+                                        <label for="address">Oppdragsadresse</label>
+                                        <input type="text" id="address" name="address">
+                                    </div>
+                                </div>
+
+                                <div class="form-grid form-grid-2">
+                                    <div class="form-field">
+                                        <label for="postalCode">Postnummer</label>
+                                        <input type="text" id="postalCode" name="postalCode" inputmode="numeric">
+                                    </div>
+                                    <div class="form-field">
+                                        <label for="city">Poststed</label>
+                                        <input type="text" id="city" name="city">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field-block section-divider">
+                                <p class="field-title">Er kontaktperson på oppdragssted samme som bestiller?</p>
+                                <div class="choice-grid choice-grid-2">
+                                    <label class="choice-pill">
+                                        <input type="radio" name="sameContact" value="yes" required>
+                                        <span>Ja</span>
+                                    </label>
+                                    <label class="choice-pill">
+                                        <input type="radio" name="sameContact" value="no" required>
+                                        <span>Nei</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="field-block section-divider">
+                                <p class="field-title">Skadetype</p>
+                                <p class="helper-text">Hjelp oss med å vurdere din sak ved å huke av for feltene under.
+                                    Ikke obligatorisk.</p>
+                                <div class="checkbox-grid">
+                                    <label class="check-item"><input type="checkbox" name="damageType"
+                                            value="Sluk"><span>Sluk</span></label>
+                                    <label class="check-item"><input type="checkbox" name="damageType"
+                                            value="Vegg"><span>Vegg</span></label>
+                                    <label class="check-item"><input type="checkbox" name="damageType"
+                                            value="Flisreparasjon"><span>Flisreparasjon</span></label>
+                                    <label class="check-item"><input type="checkbox" name="damageType"
+                                            value="Gulv"><span>Gulv</span></label>
+                                    <label class="check-item"><input type="checkbox" name="damageType"
+                                            value="Terskel"><span>Terskel</span></label>
+                                    <label class="check-item"><input type="checkbox" name="damageType"
+                                            value="Rør/avløp"><span>Rør/avløp</span></label>
+                                    <label class="check-item"><input type="checkbox" name="damageType"
+                                            value="Sisterne"><span>Sisterne</span></label>
+                                    <label class="check-item"><input type="checkbox" name="damageType"
+                                            value="Gulvvarme"><span>Gulvvarme</span></label>
+                                    <label class="check-item"><input type="checkbox" name="damageType"
+                                            value="Lekkasje/utetthet"><span>Lekkasje/utetthet</span></label>
+                                    <label class="check-item"><input type="checkbox" name="damageType"
+                                            value="Annet"><span>Annet</span></label>
+                                </div>
+                            </div>
+
+                            <div class="form-grid form-grid-1 section-divider">
+                                <div class="form-field">
+                                    <label for="damageCause">Skadeårsak</label>
+                                    <textarea id="damageCause" name="damageCause" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-grid form-grid-1">
+                                <div class="form-field">
+                                    <label for="documentation">Dokumentasjon</label>
+                                    <p class="helper-text">Last opp bilde, takstrapport osv.</p>
+                                    <input type="file" id="documentation" name="documentation">
+                                </div>
+                            </div>
+
+                            <div class="form-grid form-grid-1">
+                                <div class="form-field">
+                                    <label for="bathAge">Alder på bad</label>
+                                    <input type="number" id="bathAge" name="bathAge" min="0" value="0">
+                                </div>
+                            </div>
+
+                            <div class="form-grid form-grid-1">
+                                <div class="form-field">
+                                    <label for="comment">Har du en kommentar eller noe du ønsker å merke bestillingen
+                                        med?</label>
+                                    <textarea id="comment" name="comment" rows="4"></textarea>
+                                </div>
+                            </div>
+
+                            <label class="newsletter-row">
+                                <input type="checkbox" id="newsletter" name="newsletter">
+                                <span>Send meg gjerne gode artikler, tips og relevant info på e-post</span>
+                            </label>
+
+                            <p class="privacy-note">Vi behandler personopplysninger som beskrevet i vår
+                                personvernerklæring.</p>
+                            <button type="submit" id="orderSubmitBtn" class="btn-mtett">Send bestilling</button>
+                            <p id="orderSuccess" class="order-success hidden">Takk! Bestillingen er mottatt. Vi tar
+                                kontakt så snart som mulig.</p>
+                        </form>
+                    </section>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
