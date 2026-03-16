@@ -250,6 +250,35 @@ body {
     margin-top: 0.9rem;
 }
 
+.estimate-note {
+    margin-top: 0.9rem;
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.estimate-note strong {
+    display: block;
+    color: var(--mtett-ink);
+    margin-bottom: 0.2rem;
+}
+
+.estimate-note span {
+    color: var(--text-main);
+}
+
+.estimate-note--soft {
+    border: 1px solid #d5deea;
+    background: #f6f9fc;
+}
+
+.estimate-note--strong {
+    margin-bottom: 1rem;
+    border: 1px solid #c9d7e7;
+    background: linear-gradient(180deg, #edf3fb 0%, #f8fbff 100%);
+}
+
 .btn-mtett {
     margin-top: 1rem;
     width: 100%;
@@ -628,6 +657,11 @@ body {
     font-size: 0.82rem;
     color: var(--text-muted);
     margin-top: -0.2rem;
+}
+
+.helper-text--intro {
+    margin-top: -0.15rem;
+    margin-bottom: 0.9rem;
 }
 
 .checkbox-grid {
